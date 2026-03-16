@@ -7,6 +7,7 @@ This add-on can be self-distributed after Mozilla signs it as an **unlisted** ex
 - `manifest.json` now declares `browser_specific_settings.gecko.data_collection_permissions.required = ["none"]`.
 - `icons/blockshorts.svg` provides a real extension icon for the signed package.
 - `sign-unlisted.ps1` wraps `web-ext lint` and `web-ext sign` for the local signing flow.
+- `build-package.ps1` creates a Firefox-safe `.xpi` for manual AMO uploads.
 
 ## Option A: CLI signing with `web-ext`
 
@@ -38,8 +39,14 @@ powershell -ExecutionPolicy Bypass -File .\sign-unlisted.ps1
 
 1. Create a Mozilla add-on developer account.
 2. Open the AMO developer hub and start a new unlisted submission.
-3. Upload a package built from this extension source.
-4. Download the signed `.xpi` once Mozilla finishes processing it.
+3. Build a fresh upload package:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build-package.ps1
+```
+
+4. Upload the generated `blockshorts-firefox.xpi`.
+5. Download the signed `.xpi` once Mozilla finishes processing it.
 
 ## Install the signed add-on persistently
 
