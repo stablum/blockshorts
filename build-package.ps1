@@ -1,11 +1,22 @@
 param(
-  [string]$OutputPath = (Join-Path $PSScriptRoot "blockshorts-firefox.xpi")
+  [string]$Version,
+  [string]$OutputPath
 )
 
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $root = $PSScriptRoot
+$manifest = Get-Content (Join-Path $root "manifest.json") -Raw | ConvertFrom-Json
+
+if (-not $Version) {
+  $Version = $manifest.version
+}
+
+if (-not $OutputPath) {
+  $OutputPath = Join-Path $root ("blockshorts-firefox-{0}.xpi" -f $Version)
+}
+
 $stagingPath = [System.IO.Path]::ChangeExtension($OutputPath, ".zip")
 $files = @(
   @{ Source = "manifest.json"; Entry = "manifest.json" },
@@ -33,3 +44,4 @@ finally {
 }
 
 Move-Item $stagingPath $OutputPath -Force
+Write-Output $OutputPath

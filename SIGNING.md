@@ -45,7 +45,7 @@ powershell -ExecutionPolicy Bypass -File .\sign-unlisted.ps1
 powershell -ExecutionPolicy Bypass -File .\build-package.ps1
 ```
 
-4. Upload the generated `blockshorts-firefox.xpi`.
+4. Upload the generated `blockshorts-firefox-<version>.xpi`.
 5. Download the signed `.xpi` once Mozilla finishes processing it.
 
 ## Install the signed add-on persistently
