@@ -6,7 +6,6 @@
     "ytd-rich-shelf-renderer",
     "ytd-reel-shelf-renderer",
     "ytd-rich-section-renderer",
-    "ytd-item-section-renderer",
     "ytd-shelf-renderer"
   ].join(", ");
   const CARD_ROOT_SELECTOR = [
