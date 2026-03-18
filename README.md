@@ -24,7 +24,7 @@ See `SIGNING.md` for the exact steps.
 ## What it does
 
 - Removes Shorts shelves such as the horizontal carousel modules.
-- Hides individual Shorts cards if YouTube injects them into the grid/feed, history, or search results.
+- Hides individual Shorts cards and Shorts sections if YouTube injects them into the grid/feed, history, or search results.
 - Reapplies the filter after YouTube client-side navigation and lazy loading.
 
 ## License

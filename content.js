@@ -16,6 +16,13 @@
     "ytd-video-renderer",
     "ytd-compact-video-renderer"
   ].join(", ");
+  const SHORTS_MARKER_SELECTOR = [
+    "ytd-reel-shelf-renderer",
+    "ytd-reel-item-renderer",
+    "ytd-shorts-lockup-view-model",
+    'a[href*="/shorts/"]',
+    '[overlay-style="SHORTS"]'
+  ].join(", ");
 
   let refreshScheduled = false;
 
@@ -80,17 +87,15 @@
       return true;
     }
 
-    if (section.querySelector("ytd-reel-shelf-renderer, ytd-reel-item-renderer")) {
+    if (hasShortsHeading(section)) {
       return true;
     }
 
-    const shortsLinkCount = section.querySelectorAll('a[href*="/shorts/"]').length;
-
-    if (shortsLinkCount >= 2) {
+    if (section.querySelector(SHORTS_MARKER_SELECTOR)) {
       return true;
     }
 
-    return hasShortsHeading(section) && shortsLinkCount >= 1;
+    return false;
   }
 
   function findSectionRoot(node) {
@@ -113,9 +118,11 @@
         [
           "ytd-reel-shelf-renderer",
           "ytd-reel-item-renderer",
+          "ytd-shorts-lockup-view-model",
           "ytd-rich-shelf-renderer[is-shorts]",
           "[is-shorts]",
-          'a[href*="/shorts/"]'
+          'a[href*="/shorts/"]',
+          '[overlay-style="SHORTS"]'
         ].join(", ")
       )
       .forEach((node) => {
@@ -138,7 +145,7 @@
       return false;
     }
 
-    return Boolean(card.querySelector('a[href*="/shorts/"]'));
+    return Boolean(card.querySelector(SHORTS_MARKER_SELECTOR));
   }
 
   function hideShortsCards() {
