@@ -6,6 +6,7 @@
     "ytd-rich-shelf-renderer",
     "ytd-reel-shelf-renderer",
     "ytd-rich-section-renderer",
+    "ytd-item-section-renderer",
     "ytd-shelf-renderer"
   ].join(", ");
   const CARD_ROOT_SELECTOR = [
@@ -15,12 +16,24 @@
     "ytd-video-renderer",
     "ytd-compact-video-renderer"
   ].join(", ");
-  const SHORTS_MARKER_SELECTOR = [
+  const SECTION_SHORTS_MARKER_SELECTOR = [
     "ytd-reel-shelf-renderer",
+    "ytd-reel-item-renderer",
+    "ytd-rich-shelf-renderer[is-shorts]",
+    "[is-shorts]"
+  ].join(", ");
+  const CARD_SHORTS_MARKER_SELECTOR = [
     "ytd-reel-item-renderer",
     "ytd-shorts-lockup-view-model",
     'a[href*="/shorts/"]',
     '[overlay-style="SHORTS"]'
+  ].join(", ");
+  const NON_SHORTS_CARD_SELECTOR = [
+    "ytd-rich-item-renderer",
+    "ytd-rich-grid-media",
+    "ytd-grid-video-renderer",
+    "ytd-video-renderer",
+    "ytd-compact-video-renderer"
   ].join(", ");
 
   let refreshScheduled = false;
@@ -90,11 +103,17 @@
       return true;
     }
 
-    if (section.querySelector(SHORTS_MARKER_SELECTOR)) {
+    if (!section.querySelector(SECTION_SHORTS_MARKER_SELECTOR)) {
+      return false;
+    }
+
+    if (!section.matches("ytd-item-section-renderer")) {
       return true;
     }
 
-    return false;
+    return !Array.from(section.querySelectorAll(NON_SHORTS_CARD_SELECTOR)).some((card) => {
+      return card instanceof HTMLElement && !card.querySelector(CARD_SHORTS_MARKER_SELECTOR);
+    });
   }
 
   function findSectionRoot(node) {
@@ -117,11 +136,8 @@
         [
           "ytd-reel-shelf-renderer",
           "ytd-reel-item-renderer",
-          "ytd-shorts-lockup-view-model",
           "ytd-rich-shelf-renderer[is-shorts]",
-          "[is-shorts]",
-          'a[href*="/shorts/"]',
-          '[overlay-style="SHORTS"]'
+          "[is-shorts]"
         ].join(", ")
       )
       .forEach((node) => {
@@ -144,7 +160,7 @@
       return false;
     }
 
-    return Boolean(card.querySelector(SHORTS_MARKER_SELECTOR));
+    return Boolean(card.querySelector(CARD_SHORTS_MARKER_SELECTOR));
   }
 
   function hideShortsCards() {
