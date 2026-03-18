@@ -4,6 +4,7 @@ Firefox extension that hides YouTube Shorts shelves and Shorts cards on:
 
 - `https://www.youtube.com/`
 - `https://www.youtube.com/feed/subscriptions`
+- `https://www.youtube.com/results?search_query=...`
 
 ## Temporary install in Firefox
 
@@ -22,7 +23,7 @@ See `SIGNING.md` for the exact steps.
 ## What it does
 
 - Removes Shorts shelves such as the horizontal carousel modules.
-- Hides individual Shorts cards if YouTube injects them into the grid/feed.
+- Hides individual Shorts cards if YouTube injects them into the grid/feed or search results.
 - Reapplies the filter after YouTube client-side navigation and lazy loading.
 
 ## License
