@@ -25,8 +25,7 @@
   const CARD_SHORTS_MARKER_SELECTOR = [
     "ytd-reel-item-renderer",
     "ytd-shorts-lockup-view-model",
-    'a[href*="/shorts/"]',
-    '[overlay-style="SHORTS"]'
+    'a[href*="/shorts/"]'
   ].join(", ");
   const NON_SHORTS_CARD_SELECTOR = [
     "ytd-rich-item-renderer",
