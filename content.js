@@ -1,7 +1,7 @@
 (() => {
   const HIDDEN_CLASS = "blockshorts-hidden";
   const STYLE_ID = "blockshorts-style";
-  const TARGET_PATHS = new Set(["/", "/feed/subscriptions", "/results", "/feed/history"]);
+  const TARGET_PATHS = new Set(["/", "/feed/subscriptions", "/feed/history", "/results", "/watch"]);
   const SECTION_ROOT_SELECTOR = [
     "ytd-rich-shelf-renderer",
     "ytd-reel-shelf-renderer",

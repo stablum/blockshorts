@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Block YouTube Shorts Sections",
   "description": "Hides YouTube Shorts shelves and Shorts cards on YouTube Home and Subscriptions.",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "icons": {
     "48": "icons/blockshorts.svg",
     "96": "icons/blockshorts.svg"
