@@ -22,10 +22,14 @@
     "ytd-rich-shelf-renderer[is-shorts]",
     "[is-shorts]"
   ].join(", ");
-  const CARD_SHORTS_MARKER_SELECTOR = [
+  const DIRECT_SHORTS_CARD_SELECTOR = [
     "ytd-reel-item-renderer",
-    "ytd-shorts-lockup-view-model",
-    'a[href*="/shorts/"]'
+    "ytd-shorts-lockup-view-model"
+  ].join(", ");
+  const PRIMARY_CARD_LINK_SELECTOR = [
+    "a#thumbnail[href]",
+    "a#video-title[href]",
+    "a#video-title-link[href]"
   ].join(", ");
   const NON_SHORTS_CARD_SELECTOR = [
     "ytd-rich-item-renderer",
@@ -111,7 +115,7 @@
     }
 
     return !Array.from(section.querySelectorAll(NON_SHORTS_CARD_SELECTOR)).some((card) => {
-      return card instanceof HTMLElement && !card.querySelector(CARD_SHORTS_MARKER_SELECTOR);
+      return card instanceof HTMLElement && !isShortsCard(card);
     });
   }
 
@@ -159,20 +163,17 @@
       return false;
     }
 
-    return Boolean(card.querySelector(CARD_SHORTS_MARKER_SELECTOR));
+    if (card.querySelector(DIRECT_SHORTS_CARD_SELECTOR)) {
+      return true;
+    }
+
+    const primaryLink = card.querySelector(PRIMARY_CARD_LINK_SELECTOR);
+    return primaryLink instanceof HTMLAnchorElement && primaryLink.href.includes("/shorts/");
   }
 
   function hideShortsCards() {
     document.querySelectorAll(CARD_ROOT_SELECTOR).forEach((card) => {
       if (isShortsCard(card)) {
-        hideElement(card);
-      }
-    });
-
-    document.querySelectorAll('a[href*="/shorts/"]').forEach((link) => {
-      const card = link.closest(CARD_ROOT_SELECTOR);
-
-      if (card) {
         hideElement(card);
       }
     });
