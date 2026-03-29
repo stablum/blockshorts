@@ -1,0 +1,10 @@
+{
+  "name": "blockshorts",
+  "private": true,
+  "scripts": {
+    "test": "node tests/content-core.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^29.0.1"
+  }
+}

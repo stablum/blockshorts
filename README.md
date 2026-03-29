@@ -28,6 +28,14 @@ See `SIGNING.md` for the exact steps.
 - Hides individual Shorts cards and Shorts sections if YouTube injects them into the grid/feed, history, search results, or watch-page suggestions.
 - Reapplies the filter after YouTube client-side navigation and lazy loading.
 
+## Development
+
+Run local regression tests with:
+
+```powershell
+npm test
+```
+
 ## License
 
 Licensed under the GNU General Public License v3.0. See `LICENSE`.

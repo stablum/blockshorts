@@ -20,6 +20,7 @@ if (-not $OutputPath) {
 $stagingPath = [System.IO.Path]::ChangeExtension($OutputPath, ".zip")
 $files = @(
   @{ Source = "manifest.json"; Entry = "manifest.json" },
+  @{ Source = "content-core.js"; Entry = "content-core.js" },
   @{ Source = "content.js"; Entry = "content.js" },
   @{ Source = "README.md"; Entry = "README.md" },
   @{ Source = "LICENSE"; Entry = "LICENSE" },

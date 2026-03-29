@@ -1,195 +1,10 @@
 (() => {
-  const HIDDEN_CLASS = "blockshorts-hidden";
-  const STYLE_ID = "blockshorts-style";
-  const TARGET_PATHS = new Set(["/", "/feed/subscriptions", "/feed/history", "/results", "/watch"]);
-  const SECTION_ROOT_SELECTOR = [
-    "ytd-rich-shelf-renderer",
-    "ytd-reel-shelf-renderer",
-    "ytd-rich-section-renderer",
-    "ytd-item-section-renderer",
-    "ytd-shelf-renderer"
-  ].join(", ");
-  const CARD_ROOT_SELECTOR = [
-    "ytd-rich-item-renderer",
-    "ytd-rich-grid-media",
-    "ytd-grid-video-renderer",
-    "ytd-video-renderer",
-    "ytd-compact-video-renderer"
-  ].join(", ");
-  const SECTION_SHORTS_MARKER_SELECTOR = [
-    "ytd-reel-shelf-renderer",
-    "ytd-reel-item-renderer",
-    "ytd-rich-shelf-renderer[is-shorts]",
-    "[is-shorts]"
-  ].join(", ");
-  const DIRECT_SHORTS_CARD_SELECTOR = [
-    "ytd-reel-item-renderer",
-    "ytd-shorts-lockup-view-model"
-  ].join(", ");
-  const PRIMARY_CARD_LINK_SELECTOR = [
-    "a#thumbnail[href]",
-    "a#video-title[href]",
-    "a#video-title-link[href]"
-  ].join(", ");
-  const NON_SHORTS_CARD_SELECTOR = [
-    "ytd-rich-item-renderer",
-    "ytd-rich-grid-media",
-    "ytd-grid-video-renderer",
-    "ytd-video-renderer",
-    "ytd-compact-video-renderer"
-  ].join(", ");
+  if (typeof createBlockShortsController !== "function") {
+    return;
+  }
 
+  const controller = createBlockShortsController(window);
   let refreshScheduled = false;
-
-  function isTargetPage() {
-    return TARGET_PATHS.has(window.location.pathname);
-  }
-
-  function normalizeText(text) {
-    return text.replace(/\s+/g, " ").trim().toLowerCase();
-  }
-
-  function ensureStyle() {
-    if (document.getElementById(STYLE_ID)) {
-      return;
-    }
-
-    const style = document.createElement("style");
-    style.id = STYLE_ID;
-    style.textContent = `
-      .${HIDDEN_CLASS} {
-        display: none !important;
-      }
-    `;
-
-    (document.head || document.documentElement).appendChild(style);
-  }
-
-  function hideElement(element) {
-    if (!(element instanceof HTMLElement)) {
-      return;
-    }
-
-    element.classList.add(HIDDEN_CLASS);
-  }
-
-  function showAllHidden() {
-    document.querySelectorAll(`.${HIDDEN_CLASS}`).forEach((element) => {
-      element.classList.remove(HIDDEN_CLASS);
-    });
-  }
-
-  function hasShortsHeading(section) {
-    const headingCandidates = section.querySelectorAll(
-      "h1, h2, h3, #title, #title-text, yt-formatted-string"
-    );
-
-    return Array.from(headingCandidates).some((heading) => {
-      return normalizeText(heading.textContent || "") === "shorts";
-    });
-  }
-
-  function isShortsSection(section) {
-    if (!(section instanceof HTMLElement)) {
-      return false;
-    }
-
-    if (section.matches("ytd-reel-shelf-renderer")) {
-      return true;
-    }
-
-    if (section.hasAttribute("is-shorts")) {
-      return true;
-    }
-
-    if (hasShortsHeading(section)) {
-      return true;
-    }
-
-    if (!section.querySelector(SECTION_SHORTS_MARKER_SELECTOR)) {
-      return false;
-    }
-
-    if (!section.matches("ytd-item-section-renderer")) {
-      return true;
-    }
-
-    return !Array.from(section.querySelectorAll(NON_SHORTS_CARD_SELECTOR)).some((card) => {
-      return card instanceof HTMLElement && !isShortsCard(card);
-    });
-  }
-
-  function findSectionRoot(node) {
-    if (!(node instanceof Element)) {
-      return null;
-    }
-
-    return node.closest(SECTION_ROOT_SELECTOR);
-  }
-
-  function hideShortsSections() {
-    const candidates = new Set();
-
-    document.querySelectorAll(SECTION_ROOT_SELECTOR).forEach((section) => {
-      candidates.add(section);
-    });
-
-    document
-      .querySelectorAll(
-        [
-          "ytd-reel-shelf-renderer",
-          "ytd-reel-item-renderer",
-          "ytd-rich-shelf-renderer[is-shorts]",
-          "[is-shorts]"
-        ].join(", ")
-      )
-      .forEach((node) => {
-        const section = findSectionRoot(node);
-
-        if (section) {
-          candidates.add(section);
-        }
-      });
-
-    candidates.forEach((section) => {
-      if (isShortsSection(section)) {
-        hideElement(section);
-      }
-    });
-  }
-
-  function isShortsCard(card) {
-    if (!(card instanceof HTMLElement)) {
-      return false;
-    }
-
-    if (card.querySelector(DIRECT_SHORTS_CARD_SELECTOR)) {
-      return true;
-    }
-
-    const primaryLink = card.querySelector(PRIMARY_CARD_LINK_SELECTOR);
-    return primaryLink instanceof HTMLAnchorElement && primaryLink.href.includes("/shorts/");
-  }
-
-  function hideShortsCards() {
-    document.querySelectorAll(CARD_ROOT_SELECTOR).forEach((card) => {
-      if (isShortsCard(card)) {
-        hideElement(card);
-      }
-    });
-  }
-
-  function refresh() {
-    ensureStyle();
-
-    if (!isTargetPage()) {
-      showAllHidden();
-      return;
-    }
-
-    hideShortsSections();
-    hideShortsCards();
-  }
 
   function scheduleRefresh() {
     if (refreshScheduled) {
@@ -200,7 +15,7 @@
 
     window.requestAnimationFrame(() => {
       refreshScheduled = false;
-      refresh();
+      controller.refresh();
     });
   }
 
@@ -209,7 +24,7 @@
   });
 
   function start() {
-    refresh();
+    controller.refresh();
     observer.observe(document.documentElement, {
       childList: true,
       subtree: true
