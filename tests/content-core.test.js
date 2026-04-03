@@ -64,6 +64,9 @@ const cases = [
     pathname: "/results?search_query=test",
     html: `
       <ytd-item-section-renderer id="search-section">
+        <grid-shelf-view-model id="search-shorts-shelf">
+          <h2><yt-formatted-string>Shorts</yt-formatted-string></h2>
+        </grid-shelf-view-model>
         <ytd-video-renderer id="search-result-1">
           <a id="thumbnail" href="/watch?v=keep-search"></a>
           <ytd-shorts-lockup-view-model id="nested-search-short"></ytd-shorts-lockup-view-model>
@@ -74,14 +77,19 @@ const cases = [
         <ytd-video-renderer id="search-short-result">
           <a id="thumbnail" href="/shorts/remove-search"></a>
         </ytd-video-renderer>
+        <yt-lockup-view-model id="search-badge-short">
+          <span aria-label="Shorts"></span>
+        </yt-lockup-view-model>
       </ytd-item-section-renderer>
     `,
     assert(document) {
       assert.equal(isHidden(document, "search-section"), false);
+      assert.equal(isHidden(document, "search-shorts-shelf"), true);
       assert.equal(isHidden(document, "search-result-1"), false);
       assert.equal(isHidden(document, "nested-search-short"), true);
       assert.equal(isHidden(document, "search-result-2"), false);
       assert.equal(isHidden(document, "search-short-result"), true);
+      assert.equal(isHidden(document, "search-badge-short"), true);
     }
   },
   {

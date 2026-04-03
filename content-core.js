@@ -20,7 +20,8 @@
     "ytd-rich-shelf-renderer",
     "ytd-reel-shelf-renderer",
     "ytd-rich-section-renderer",
-    "ytd-shelf-renderer"
+    "ytd-shelf-renderer",
+    "grid-shelf-view-model"
   ].join(", ");
   const CARD_ROOT_SELECTOR = [
     "ytd-rich-item-renderer",
@@ -28,6 +29,7 @@
     "ytd-grid-video-renderer",
     "ytd-video-renderer",
     "ytd-compact-video-renderer",
+    "yt-lockup-view-model",
     "ytd-reel-item-renderer",
     "ytd-shorts-lockup-view-model"
   ].join(", ");
@@ -46,12 +48,18 @@
     "a#video-title[href]",
     "a#video-title-link[href]"
   ].join(", ");
+  const SHORTS_BADGE_SELECTOR = [
+    "span.ytd-thumbnail-overlay-time-status-renderer[aria-label='Shorts']",
+    "yt-formatted-string[aria-label='Shorts']",
+    "span[aria-label='Shorts']"
+  ].join(", ");
   const NON_SHORTS_CARD_SELECTOR = [
     "ytd-rich-item-renderer",
     "ytd-rich-grid-media",
     "ytd-grid-video-renderer",
     "ytd-video-renderer",
-    "ytd-compact-video-renderer"
+    "ytd-compact-video-renderer",
+    "yt-lockup-view-model"
   ].join(", ");
   const SECTION_HEADING_SELECTOR = "h1, h2, h3, #title, #title-text, yt-formatted-string";
   const PAGE_CONFIGS = {
@@ -69,7 +77,7 @@
     },
     "/results": {
       sectionRootSelector: DIRECT_SECTION_ROOT_SELECTOR,
-      useHeadingCandidates: false
+      useHeadingCandidates: true
     },
     "/watch": {
       sectionRootSelector: DIRECT_SECTION_ROOT_SELECTOR,
@@ -149,6 +157,10 @@
     }
 
     if (getOwnedDescendants(card, DIRECT_SHORTS_CARD_SELECTOR, CARD_ROOT_SELECTOR).length > 0) {
+      return true;
+    }
+
+    if (getOwnedDescendants(card, SHORTS_BADGE_SELECTOR, CARD_ROOT_SELECTOR).length > 0) {
       return true;
     }
 
